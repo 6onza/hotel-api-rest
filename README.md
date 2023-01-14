@@ -15,4 +15,4 @@ La aplicación consiste en un sistema de reservas para un hotel, donde los usuar
 
 `api/payment/`: Este endpoint permite enviar los datos de tarjeta de credito y genera un token de pago para luego poder procesar el pago con el siguiente endpoint.
 
-`payment/<int:pk>/charge/`: Este endpoint se encarga de cargar el monto de la reserva a la tarjeta del cliente y de ser exitoso cambia el estado de la reserva. Recive la id de la reserva y el token de pago.
+`payment/<int:pk>/charge/`: Este endpoint se encarga de cargar el monto de la reserva a la tarjeta del cliente y de ser exitoso cambia el estado de la reserva. Recibe la id de la reserva y el token de pago.
