@@ -7,7 +7,8 @@ from rest_framework import status
 from .models import Room, Reservation
 from .serializers import RoomSerializer, ReservationSerializer
 from datetime import datetime
-
+from django.conf import settings
+import stripe
 
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
@@ -185,3 +186,60 @@ class ReservationDeleteView(APIView):
 
         reservation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+########## PAYMENT VIEWS #############
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+class PaymentView(APIView):
+    def post(self, request):
+        try:
+            token = stripe.Token.create(
+                card={
+                    "number": request.data.get('number'),
+                    "exp_month": request.data.get('exp_month'),
+                    "exp_year": request.data.get('exp_year'),
+                    "cvc": request.data.get('cvc'),
+                },
+            )
+            return Response({"token": token.id}, status=status.HTTP_201_CREATED)
+
+        except stripe.error.CardError as e:
+            return Response({"error": e.json_body}, status=e.http_status)
+
+        except stripe.error.InvalidRequestError as e:
+            return Response({"error": e.json_body}, status=e.http_status)
+
+        except Exception as e:
+            return Response({"error": e}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PaymentChargeView(APIView):
+    # This view is used to charge the customer and change the status of the reservation
+    def post(self, request, pk):
+        try:
+            reservation = Reservation.objects.get(pk=pk)
+        except Reservation.DoesNotExist:
+            return Response({'error': 'The specified reservation does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            charge = stripe.Charge.create(
+                amount=int(reservation.total_price * 100), # amount in cents
+                currency="usd",
+                source=request.data.get('token'),
+                description="Charge for " + reservation.customer_email,
+            )
+            reservation.status = 'paid'
+            reservation.save()
+            return Response({"charge": charge}, status=status.HTTP_201_CREATED)
+
+        except stripe.error.CardError as e:
+            return Response({"error": e.json_body}, status=e.http_status)
+
+        except stripe.error.InvalidRequestError as e:
+            return Response({"error": e.json_body}, status=e.http_status)
+
+        except Exception as e:
+            return Response({"error: " + str(e)}, status=status.HTTP_400_BAD_REQUEST)
