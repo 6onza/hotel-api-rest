@@ -20,32 +20,15 @@ class ReservationViewSet(viewsets.ModelViewSet):
 
 class RoomCreateView(APIView):
     def post(self, request, format=None):
-        room_id = request.data.get('room_id')
         capacity = request.data.get('capacity')
         price_per_day = request.data.get('price_per_day')
 
-        if not all([room_id, capacity, price_per_day]):
+        if not all([capacity, price_per_day]):
             return Response({'error': 'room_id, capacity, and price_per_day are required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # validate if room_id is integer
-        if not isinstance(room_id, int):
-            return Response({'error': 'room_id must be an integer'}, status=status.HTTP_400_BAD_REQUEST)
-
-        #validate if room_id is unique
-        if Room.objects.filter(room_id=room_id).exists():
-            return Response({'error': 'room_id is already in use'}, status=status.HTTP_400_BAD_REQUEST)
-
-        #validate if room_id is positive
-        if room_id < 0:
-            return Response({'error': 'room_id must be a positive integer'}, status=status.HTTP_400_BAD_REQUEST)
 
         #validate if capacity is positive
         if capacity < 0:
             return Response({'error': 'capacity must be a positive integer'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Validate that the required data is provided
-        if not all([room_id, capacity, price_per_day]):
-            return Response({'error': 'room_id, capacity, and price_per_day are required'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not isinstance(capacity, int):
             return Response({'error': 'capacity must be an integer'}, status=status.HTTP_400_BAD_REQUEST)
@@ -53,9 +36,8 @@ class RoomCreateView(APIView):
         if not isinstance(price_per_day, float) or price_per_day < 0:
             return Response({'error': 'price_per_day must be a positive float'}, status=status.HTTP_400_BAD_REQUEST)
 
-
         # Create the room
-        room = Room(room_id=room_id, capacity=capacity, price_per_day=price_per_day)
+        room = Room(capacity=capacity, price_per_day=price_per_day)
         room.save()
 
         # Serialize the room and return it
