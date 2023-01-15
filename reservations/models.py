@@ -16,6 +16,7 @@ class Reservation(models.Model):
         ("Cash", "Cash"),
         ("Credit Card", "Credit Card"),
         ("PayPal", "PayPal"),
+        ("Stripe", "Stripe"),
         ("pending", "pending"),
     )
     reservation_id = models.AutoField(primary_key=True, editable=False)
