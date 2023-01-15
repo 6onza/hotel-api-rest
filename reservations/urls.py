@@ -7,7 +7,8 @@ from .views import (RoomViewSet,
                     ReservationDetailView, 
                     ReservationUpdateView,
                     PaymentView,
-                    PaymentChargeView
+                    PaymentChargeView,
+                    ReservationCancelView
                     )
 
 router = routers.DefaultRouter()
@@ -20,6 +21,7 @@ urlpatterns = [
     path('reserve/', ReserveView.as_view(), name='reserve'),
     path('reservations/<int:pk>/', ReservationDetailView.as_view(), name='reservation-detail'),
     path('reservations/<int:pk>/update/', ReservationUpdateView.as_view(), name='reservation-update'),
+    path('reservations/<int:pk>/cancel/', ReservationCancelView.as_view(), name='reservation-cancel'),
     path('payment/', PaymentView.as_view(), name='payment'),
     path('payment/<int:pk>/charge/', PaymentChargeView.as_view(), name='payment-charge'),
 ]
