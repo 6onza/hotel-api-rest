@@ -155,6 +155,7 @@ class ReservationUpdateView(APIView):
         reservation.end_date = end_date
         reservation.customer_name = customer_name
         reservation.customer_email = customer_email
+        reservation.status = 'pending'
 
         reservation.save()
 
@@ -173,6 +174,17 @@ class ReservationDeleteView(APIView):
         reservation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class ReservationCancelView(APIView):
+    def post(self, request, pk, format=None):
+        try:
+            reservation = Reservation.objects.get(pk=pk)
+        except Reservation.DoesNotExist:
+            return Response({'error': 'The specified reservation does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        # elimino la reserva
+        reservation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 ########## PAYMENT VIEWS #############
