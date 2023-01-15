@@ -23,6 +23,7 @@ class RoomCreateView(APIView):
         capacity = request.data.get('capacity')
         price_per_day = request.data.get('price_per_day')
 
+        # Validate that the required data is provided
         if not all([capacity, price_per_day]):
             return Response({'error': 'room_id, capacity, and price_per_day are required'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -40,7 +41,6 @@ class RoomCreateView(APIView):
         room = Room(capacity=capacity, price_per_day=price_per_day)
         room.save()
 
-        # Serialize the room and return it
         serializer = RoomSerializer(room)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -81,6 +81,10 @@ class ReserveView(APIView):
         # Validate if the quantity of people is valid
         if room.capacity < Reservation.objects.filter(start_date__lte=end_date, end_date__gte=start_date).count():
             return Response({'error': 'The room is not available for the specified dates'}, status=status.HTTP_400_BAD_REQUEST)
+
+        #validate if the date is from this year
+        if start_date.year != datetime.now().year or end_date.year != datetime.now().year:
+            return Response({'error': 'Cannot reserve a room for a date that is not from this year'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Create the reservation
         reservation = Reservation(room=room, start_date=start_date, end_date=end_date,
@@ -214,6 +218,7 @@ class PaymentChargeView(APIView):
                 description="Charge for " + reservation.customer_email,
             )
             reservation.status = 'paid'
+            reservation.payment_method = 'stripe'
             reservation.save()
             return Response({"charge": charge}, status=status.HTTP_201_CREATED)
 
