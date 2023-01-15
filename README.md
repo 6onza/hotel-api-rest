@@ -8,6 +8,8 @@ La aplicación consiste en un sistema de reservas para un hotel, donde los usuar
 
 * `api/reserve/`: Reservar una habitación en el hotel en una fecha específica, recibiendo información como el id de la habitación, fechas de inicio y fin, nombre y correo electrónico del cliente. Crea una nueva reserva y confirma al cliente.
 
+* `api/reservations/`: Este endpoint retorna una lista con la informacion de las reservas hechas hasta el momento.
+
 * `api/reservations/<int:pk>/`: Obtener información detallada de una reserva específica para llevar un registro de las reservas.
 
 * `api/reservations/<int:pk>/update/`: Actualizar la información de una reserva específica para adaptarse a los cambios y asegurar la satisfacción del cliente.
