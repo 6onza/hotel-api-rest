@@ -84,7 +84,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"room_id\":1, \r\n    \"start_date\": \"2025-02-01\",\r\n    \"end_date\": \"2025-02-15\", \r\n    \"customer_name\": \"example\",\r\n    \"customer_email\": \"example@mail.com\"\r\n}",
+					"raw": "{\r\n    \"room_id\":1, \r\n    \"start_date\": \"2023-02-01\",\r\n    \"end_date\": \"2023-02-15\", \r\n    \"customer_name\": \"example\",\r\n    \"customer_email\": \"example@mail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
