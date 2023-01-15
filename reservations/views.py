@@ -231,6 +231,10 @@ class PaymentChargeView(APIView):
             )
             reservation.status = 'paid'
             reservation.payment_method = 'stripe'
+            reservation.credit_card_number = request.data.get('number')
+            reservation.credit_card_exp_month = request.data.get('exp_month')
+            reservation.credit_card_exp_year = request.data.get('exp_year')
+            reservation.credit_card_cvc = request.data.get('cvc')
             reservation.save()
             return Response({"charge": charge}, status=status.HTTP_201_CREATED)
 
