@@ -214,6 +214,28 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "localhost:8000/api/reservations/1/cancel/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/reservations/1/cancel/",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"reservations",
+						"1",
+						"cancel",
+						""
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
