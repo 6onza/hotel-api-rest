@@ -2,17 +2,22 @@
 La aplicación consiste en un sistema de reservas para un hotel, donde los usuarios pueden ver las habitaciones disponibles, hacer reservas, ver y actualizar sus reservas existentes, y procesar pagos. Los endpoints incluyen la creación y listado de habitaciones, reservas, detalles y actualizaciones de reservas, y procesamiento de pagos. El sistema tambien esta dockerizado para facilitar su implementacion en entornos de produccion.
 
 # Endpoints
+* `api/create-room/`: Crear nuevas habitaciones en el hotel para facilitar el guardado de la información en la base de datos.
 
-* `api/create-room/`: Este endpoint permite crear nuevas habitaciones en el hotel. Es necesario tener esta funcionalidad para facilitar guardar la información de las habitaciones en la base de datos.
+* `api/rooms/`: Obtener todas las habitaciones disponibles en el hotel para poder realizar reservas.
 
-* `api/rooms/`: Este endpoint permite obtener todas las habitaciones disponibles en el hotel. Es importante tener acceso a esta información para poder realizar reservas.
+* `api/reserve/`: Reservar una habitación en el hotel en una fecha específica, recibiendo información como el id de la habitación, fechas de inicio y fin, nombre y correo electrónico del cliente. Crea una nueva reserva y confirma al cliente.
 
-* `api/reserve/`: Este endpoint permite reservar una habitación en el hotel en una fecha específica. Recibe una serie de parámetros como el id de la habitación, las fechas de inicio y fin de la reserva, el nombre y correo electrónico del cliente, entre otros. Con esta información, se crea una nueva reserva en la base de datos y se confirma al cliente.
+* `api/reservations/<int:pk>/`: Obtener información detallada de una reserva específica para llevar un registro de las reservas.
 
-* `api/reservations/<int:pk>/`: Este endpoint permite obtener información detallada de una reserva específica. Es importante tener acceso a esta información para poder llevar un registro de las reservas realizadas.
+* `api/reservations/<int:pk>/update/`: Actualizar la información de una reserva específica para adaptarse a los cambios y asegurar la satisfacción del cliente.
 
-* `api/reservations/<int:pk>/update/`: Este endpoint permite actualizar la información de una reserva específica. Es importante tener esta funcionalidad para poder adaptarse a los cambios en las reservas y asegurar la satisfacción del cliente.
+* `api/reservations/<int:pk>/cancel/`: Permite cancelar una reserva específica mediante su id.
 
-* `api/payment/`: Este endpoint permite enviar los datos de tarjeta de credito y genera un token de pago para luego poder procesar el pago con el siguiente endpoint.
+* `api/payment/`: Enviar los datos de tarjeta de crédito y generar un token de pago para procesar el pago en el siguiente endpoint.
 
-* `payment/<int:pk>/charge/`: Este endpoint se encarga de cargar el monto de la reserva a la tarjeta del cliente y de ser exitoso cambia el estado de la reserva. Recibe la id de la reserva y el token de pago.
+* `api/payment/<int:pk>/charge/`: Cargar el monto de la reserva a la tarjeta del cliente y cambiar el estado de la reserva en caso de éxito. Recibe la id de la reserva y el token de pago.
+
+## Sistema de pagos
+
+Para configurar el sistema de pagos, es necesario obtener una cuenta en Stripe (https://stripe.com/) y obtener las llaves de publicación y privadas. Estas llaves deben ser agregadas en el archivo con sus variables de entorno.
