@@ -23,3 +23,10 @@ La aplicación consiste en un sistema de reservas para un hotel, donde los usuar
 ## Sistema de pagos
 
 Para configurar el sistema de pagos, es necesario obtener una cuenta en Stripe (https://stripe.com/) y obtener las llaves de publicación y privadas. Estas llaves deben ser agregadas en el archivo con sus variables de entorno.
+
+## Docker
+* Crear el container: `docker build -t <tag_del_container> .`
+* Correr el container: `docker run <tag_del_container>`
+* Crear las migraciones: `docker run web python manage.py makemigrations reservations`
+* Para ejecutar las migraciones dentro del container: `docker run web python manage.py migrate`
+* Finalmente: `docker-compose up`
